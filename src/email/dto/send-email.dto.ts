@@ -14,4 +14,10 @@ export class SendEmailDTO {
   })
   @IsNotEmpty()
   emailBody: string;
+
+  @ApiProperty({
+    example: 'This is the email subject content.',
+  })
+  @IsNotEmpty()
+  subject: string;
 }

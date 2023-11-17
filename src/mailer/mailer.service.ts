@@ -1,19 +1,21 @@
 import { Injectable } from '@nestjs/common';
-import fs from 'node:fs/promises';
+import * as fs from 'fs/promises';
 import { ConfigService } from '@nestjs/config';
-import nodemailer from 'nodemailer';
+import * as nodemailer from 'nodemailer';
 import Handlebars from 'handlebars';
+import * as path from 'path';
 
 @Injectable()
 export class MailerService {
   private readonly transporter: nodemailer.Transporter;
   constructor(private readonly configService: ConfigService) {
+   
     this.transporter = nodemailer.createTransport({
-      host:  configService.get<string>('HOST'),
-      port: configService.get<string>('PORT'),
-      // ignoreTLS: configService.get('mail.ignoreTLS'),
+      host:  configService.get<string>('MAIL_HOST'),
+      port: configService.get<string>('MAIL_PORT'),
+      // ignoreTLS: configService.get('MAIL_IGNORE_TLS'),
       secure: configService.get<string>('MAIL_SECURE'),
-      requireTLS: configService.get<string>('MAIL_REQUIRETLS'),
+      // requireTLS: configService.get<string>('MAIL_REQUIRE_TLS'),
       auth: {
         user: configService.get<string>('MAIL_USER'),
         pass: configService.get<string>('MAIL_PASSWORD'),
@@ -31,7 +33,9 @@ export class MailerService {
   }): Promise<void> {
     let html: string | undefined;
     if (templatePath) {
-      const template = await fs.readFile(templatePath, 'utf-8');
+      const fullPath = path.resolve(__dirname, 'emailTemplate', templatePath);
+
+      const template = await fs.readFile(fullPath, 'utf-8');
       html = Handlebars.compile(template, {
         strict: true,
       })(context);
@@ -41,11 +45,7 @@ export class MailerService {
       ...mailOptions,
       from: mailOptions.from
         ? mailOptions.from
-        : `"${this.configService.get('MAIL_DEFAULTNAME', {
-            infer: true,
-          })}" <${this.configService.get('MAIL_DEFAULTEMAIL', {
-            infer: true,
-          })}>`,
+        : `"${this.configService.get('MAIL_DEFAULT_NAME')}" <${this.configService.get('MAIL_DEFAULT_EMAIL')}>`,
       html: mailOptions.html ? mailOptions.html : html,
     });
   }

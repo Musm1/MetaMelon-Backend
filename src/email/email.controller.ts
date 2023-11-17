@@ -8,7 +8,7 @@ export class EmailController {
 
   // generate mnemonic
   @Post('/send')
-  async generateMnemonic(@Body() body: SendEmailDTO) {
+  async sendEmail(@Body() body: SendEmailDTO) {
     return this.emailService.sendEmail(body);
   }
 

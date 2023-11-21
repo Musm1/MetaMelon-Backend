@@ -1,18 +1,5 @@
 {
     "version": 2,
-    "env": {
-        "MAIL_HOST": "smtp.gmail.com",
-        "PORT": 4006,
-        "MAIL_PORT": 465,
-        "MAIL_USER": "testingemailsynergy@gmail.com",
-        "MAIL_PASSWORD": "lkdsyxruuvlkkhiq",
-        "MAIL_IGNORE_TLS": true,
-        "MAIL_SECURE": true,
-        "MAIL_REQUIRE_TLS": true,
-        "MAIL_DEFAULT_EMAIL": "testingemailsynergy@gmail.com",
-        "MAIL_DEFAULT_NAME": "synergytest",
-        "MAIL_CLIENT_PORT": "1080"
-    },
     "builds":[
         {
             "src":"src/main.ts",
